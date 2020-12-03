@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Quiz</title>
+	<meta charset="UTF-8">
+	<!--<link rel="stylesheet" href=".css">-->
+	<script src="term_basicobject.js"></script>
+	<script src="polynome_derivation.js"></script> 
+	<script src="number_series.js"></script>
+	<script src="estimate.js"></script>
+	<script src="integration_simple.js"></script> <!--uncomment für Integration -->
+	<script src="differentiation_rules.js"></script>
+</head>
+
+<body>
+
+
+<p>Polynom erstellen: <input type="submit" onclick="task_polynom()" value="Erstellung"></input></p>
+<p>Antwort kontrollieren: <input type="submit" onclick="solution_polynom()" value="Kontrolle"></input></p>
+<!--uncomment für Polynome/Differenzieren -->
+
+
+<p>Reihe erstellen: <input type="submit" onclick="task_series()" value="Erstellen"></input></p>
+<p>Lösung kontrollieren: <input type="submit" onclick="solution_series()" value="Kontrollieren"></input></p>
+<!-- uncomment für Zahlenreihen -->
+
+<p>Formel erstellen: <input type="submit" onclick="task_estimate()" value="Erstellen"></input></p>
+<p>Lösung kontrollieren: <input type="submit" onclick="solution_estimate()" value="Kontrollieren"></input></p>
+<!-- uncomment für Schätzen -->
+
+<p>Frage erstellen: <input type="submit" onclick="task_differentiate()" value="Differential"></input></p>
+<p>Frage erstellen: <input type="submit" onclick="task_integrate()" value="Integral"></input></p>
+<p>Antwort kontrollieren: <input type="submit" onclick="solution_visual()" value="Kontrolle"></input></p>
+<!-- uncomment für Differenzieren/Integrieren-Regeln -->
+
+<p id="question"></p>
+<p id="solution"></p>
+
+</body>
+
+</html>
