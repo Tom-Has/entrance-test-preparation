@@ -1,24 +1,27 @@
-//Objekt-Konstruktor basic_object(param_coeff, param_expo, param_val), sowie Ableitungs- und Integrier-Funktionen aus term_basicobject.js übernommen
-//muss noch grundlegend überarbeitet werden, dzt. kaum funktionsfähig und stark reduziert
+//object constructor basic_object(param_coeff, param_expo) as well as derivation and integration functions exist in term_basicobject.js
 
-//Funktion zur Ausgabe der Aufgabe und Stammfunktion, gleichname Variablen wie im o. g. Script haben sinngemäße Bedeutung
+//function for creating a very simple integral task and its solution
 function task_integrate() {
 	document.getElementById('question').innerHTML = '';
 	document.getElementById('solution').innerHTML = '';
 	document.getElementById('solution').style.visibility = 'hidden';
-	let terms = 3;													//willkürliche Festlegung auf exakt drei Terme pro Aufgabe, kann später zufällig festgelegt werden
+	//arbitrary number of terms, can be replaced with random assignment at leisure
+	let terms = 3;													
 	let question = '&int; (';
 	let answer = 'F(x) = ';
 	for(let l = 0; l < terms; ++l) {
-		if(Math.round(Math.random())) {								//Rundung zw. 0 und 1 bestimmt zufällig ob nur ein basic_object (Summenregel) erstellt wird, mit kleinem Schwerpunkt auf 0 (Math.random() inkl. 0, exkl. 1)
+		//two way random determination if only a basic term is created or a simple term for partial integration with s slight focus on the first option (Math.random() incl. 0 but excl. 1)
+		if(Math.round(Math.random())) {
 			let sum_norm = new basic_object(Math.ceil(Math.random()*(max_coeff - min_coeff)+min_coeff), Math.ceil(Math.random()*(max_expo - min_expo)+min_expo));
 			let sum_stem = integrate_it(sum_norm);
 			question += sum_norm.output();
-			if(l == 0)												//unangenehme Lösung aus o. g. Script übernommen
+			//again testing for a first case via loop variable
+			if(l == 0)
 				first = true;
 			answer += sum_stem.output();
 		} 
-		else {														//alternativ sehr einfach gestrickte partielle Integration
+		//super simple verion of partial integration
+		else {
 			let sum_part = new basic_object(Math.round(Math.random()*9+1), Math.ceil(Math.random()*4));
 			first = true;
 			if(l == 0) {
@@ -69,10 +72,6 @@ function task_integrate() {
 	document.getElementById('solution').innerHTML = answer;
 }
 
-//solution_visual() wird von differentiation_rules.js übernommen, es wird nur die visibility vom Lösungsfeld auf sichtbar gestellt
+//solution_visual() as in differentiation_rules.js
 
-/***
-Zwischenparken von alten Bestandteilen:
-...
-***/
 
