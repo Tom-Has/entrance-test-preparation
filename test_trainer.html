@@ -2,37 +2,68 @@
 <html>
 
 <head>
-	<title>Quiz</title>
+	<title>Test trainer</title>
 	<meta charset="UTF-8">
-	<!--<link rel="stylesheet" href=".css">-->
 	<script src="term_basicobject.js"></script>
-	<script src="polynome_derivation.js"></script> 
 	<script src="number_series.js"></script>
 	<script src="estimate.js"></script>
-	<script src="integration_simple.js"></script> <!--uncomment für Integration -->
+	<script src="rationals.js"></script>
+	<script src="zero_quad.js"></script>
+	<script src="basic_algebra.js"></script>
+	<script src="integration_simple.js"></script>
 	<script src="differentiation_rules.js"></script>
+	<script src="quest_catalogue.js"></script>
 </head>
 
-<body>
+<body style="background-color:OldLace;">
 
+<h1 align="center">Welcome to the entrance test trainer!</h1>
+<hr>
 
-<p>Polynom erstellen: <input type="submit" onclick="task_polynom()" value="Erstellung"></input></p>
-<p>Antwort kontrollieren: <input type="submit" onclick="solution_polynom()" value="Kontrolle"></input></p>
-<!--uncomment für Polynome/Differenzieren -->
+<h2 align="center">Mathematical tasks</h2>
 
+<div style="display:flex; flex-direction: row; align-content: space-around; justify-content: space-evenly;">
+<p>Logic Series<br>
+<input type="submit" onclick="task_series()" value="Task"></input>
+<input type="submit" onclick="solution_series()" value="Solution"></input>
+</p>
 
-<p>Reihe erstellen: <input type="submit" onclick="task_series()" value="Erstellen"></input></p>
-<p>Lösung kontrollieren: <input type="submit" onclick="solution_series()" value="Kontrollieren"></input></p>
-<!-- uncomment für Zahlenreihen -->
+<p>Result estimation<br>
+<input type="submit" onclick="task_estimate()" value="Task"></input>
+<input type="submit" onclick="solution_estimate()" value="Solution"></input>
+</p>
 
-<p>Formel erstellen: <input type="submit" onclick="task_estimate()" value="Erstellen"></input></p>
-<p>Lösung kontrollieren: <input type="submit" onclick="solution_estimate()" value="Kontrollieren"></input></p>
-<!-- uncomment für Schätzen -->
+<p>Rational numbers<br>
+<input type="submit" onclick="task_rational()" value="Task"></input>
+<input type="submit" onclick="solution_rational()" value="Solution"></input>
+</p>
 
-<p>Frage erstellen: <input type="submit" onclick="task_differentiate()" value="Differential"></input></p>
-<p>Frage erstellen: <input type="submit" onclick="task_integrate()" value="Integral"></input></p>
-<p>Antwort kontrollieren: <input type="submit" onclick="solution_visual()" value="Kontrolle"></input></p>
-<!-- uncomment für Differenzieren/Integrieren-Regeln -->
+<p>Square functions<br>
+<input type="submit" onclick="task_sqfunc()" value="Task"></input>
+<input type="submit" onclick="solution_sqfunc()" value="Solution"></input>
+</p>
+
+<p>Algebra<br>
+<input type="submit" onclick="task_algebra()" value="Task"></input>
+<input type="submit" onclick="solution_algebra()" value="Solution"></input>
+</p>
+
+<p>Differentiation/Integration<br>
+<input type="submit" onclick="task_differentiate()" value="Differentiate"></input>
+<input type="submit" onclick="task_integrate()" value="Integrate"></input>
+<input type="submit" onclick="solution_visual()" value="Solution"></input>
+</p>
+
+</div>
+<hr>
+
+<h2 align="center">Single choice questions</h2>
+<p align="center">Nature's sciences<br>
+<input type="submit" onclick="task_scitec()" value="Question"></input>
+<input type="submit" onclick="solution_scitec()" value="Answer"></input>
+</p>
+
+<hr>
 
 <p id="question"></p>
 <p id="solution"></p>
