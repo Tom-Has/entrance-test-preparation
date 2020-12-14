@@ -42,7 +42,7 @@ function chain(length) {
 	}
 }
 
-//function for transmitting task data to html
+//function for transmitting task data to html, both task and solution are generated in this function
 function task_differentiate() {
 	document.getElementById('question').innerHTML = '';
 	document.getElementById('solution').innerHTML = '';
