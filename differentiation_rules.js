@@ -1,6 +1,6 @@
-//Objekt-Konstruktor basic_object(param_coeff, param_expo, param_val), sowie Ableitungs-Funktion aus term_basicobject.js übernommen
+//object sonstructor for basic_object(param_coeff, param_expo, param_val) as well as derivation function see term_basicobject.js
 
-//Konstruktor für den multiplikativen Term, hier auf exakt eine Multiplikation beschränkt ("Produktregel"), ohne Integral
+//constructor for a multiplicative term, here restricted to one multiplication (applying the multiplication rule)
 function product() {
 	this.bracket_one_norm = [];
 	this.bracket_one_diff = [];
@@ -18,9 +18,10 @@ function product() {
 	}
 }
 
-//Konstruktor für den Term aus verketteten Funktionen, hier exakt auf g o f beschränkt ("Kettenregel")
-function chain(length) {														//Übergabe eines Parameters, für Differenzieren und Integrieren unterschiedlich
-	let determine_outer = Math.ceil(Math.random()*3);							//Zufallsvariable, die bestimmt ob die äußere Funktion e, sin oder cos ist
+//constructor for a two element chain term of functions, here restricted to three cases of outer functions with a summative term as inner function
+function chain(length) {
+	//random variable for determining e, sin or cos as outer function
+	let determine_outer = Math.ceil(Math.random()*3);							
 	if(determine_outer == 1) {
 		this.outer_norm = 'e';
 		this.outer_diff = 'e';
@@ -33,44 +34,50 @@ function chain(length) {														//Übergabe eines Parameters, für Differe
 		this.outer_norm = 'cos';
 		this.outer_diff = '-sin';
 	}
-	let determine_inner = length;												//wie im Produktkonstruktor, allerdings mit Zufallszahl im Intervall [min_inner, max_inner]
 	this.inner_norm = [];
 	this.inner_diff = [];
-	this.inner_stem = [];
-	for(let i = 0; i < determine_inner; ++i) {
+	for(let i = 0; i < length; ++i) {
 		this.inner_norm[i] = new basic_object(Math.ceil(Math.random()*(max_coeff - min_coeff)+min_coeff), Math.ceil(Math.random()*(max_expo - min_expo)+min_expo));
 		this.inner_diff[i] = differentiate_it(this.inner_norm[i]);
 	}
 }
 
-//Funktion zur Ausgabe der Differentialgleichung
+//function for transmitting task data to html
 function task_differentiate() {
 	document.getElementById('question').innerHTML = '';
 	document.getElementById('solution').innerHTML = '';
 	document.getElementById('solution').style.visibility = 'hidden';
-	var term_no = Math.floor(Math.random()*(max_total-min_total)+min_total);	//legt die Anzahl der Terme für jede Aufgabe zufällig aus [1, 5] fest
-	var rand_rule = 0;															//wird die Zufallsvariable, die entscheidet welcher Regelterm an der aktuellen Position dargestellt wird
-	var question = 'f(x) = ';													//String-Variable (Formel) für HTML-Element
-	var answer = 'f(x)´ = ';													//String-Variable (korrekte erste Ableitung) für HTML-Element
+	//number of total terms 
+	var term_no = Math.floor(Math.random()*(max_total-min_total)+min_total);
+	//variable for randomly deciding the appearance and hence the applicable rule for each term
+	var rand_rule = 0;
+	//string variables for task and solution for html content 
+	var question = 'f(x) = ';
+	var answer = 'f(x)´ = ';
+	//number of terms is processed
 	for(let j = 0; j < term_no; ++j) {
-		rand_rule = Math.ceil(Math.random()*3);									//Zufallsvariable entscheidet hier über die anzuwendende Regel um einen entsprechenden Term zu erstellen
+		//appearance of terms is defined
+		rand_rule = Math.ceil(Math.random()*3);
 		if(rand_rule == 1) {
 			let norm = new basic_object(Math.ceil(Math.random()*(max_coeff - min_coeff)+min_coeff), Math.ceil(Math.random()*(max_expo - min_expo)+min_expo));
 			let diff = differentiate_it(norm);
 			question += norm.output();
-			if(j == 0)															//unangenehme Lösung, hier wäre eine zweite flag-Variable konsistenter und wohl auch verständlicher
+			//combination of loop variable at the beginning for the very first term and setting first to true for the first inner object of a term (first is defined and used in term_basicobject.js)
+			if(j == 0)
 				first = true;
 			answer += diff.output();
 		}
 		else if(rand_rule == 2) {
 			let prod = new product();
-			if(j == 0) {														//s. o., zweite flag
-				question += '(';												//Start Angabe-String
-				answer += '(';													//vorzeitige Definition String korrekte Ableitung
+			//starting product terms with brackets ot the first position
+			if(j == 0) {
+				question += '(';
+				answer += '(';	
 			}
+			//or continuing the series in a summative way
 			else {
-				question += ' + (';												//alternativ Vorzeichen, falls nicht mehr erste Position
-				answer += ' + (';												//eigentlicher Start String korrekte Ableitung, weiter ab Fortsetzung
+				question += ' + (';
+				answer += ' + (';	
 			}
 			first = true;
 			for(let i = 0; i < prod.bracket_one_norm.length; ++i)
@@ -79,9 +86,10 @@ function task_differentiate() {
 			first = true;
 			for(let i = 0; i < prod.bracket_two_norm.length; ++i)
 				question += prod.bracket_two_norm[i].output();
-			question += ')';													//Ende Angabe-String														
+			//task string ends here
+			question += ')';												
 			first = true;
-			for(let i = 0; i < prod.bracket_one_norm.length; ++i)				//Fortsetzung String korrekte Ableitung
+			for(let i = 0; i < prod.bracket_one_norm.length; ++i)
 				answer += prod.bracket_one_norm[i].output();
 			answer += ')*(';
 			first = true;
@@ -95,22 +103,26 @@ function task_differentiate() {
 			first = true;
 			for(let i = 0; i < prod.bracket_two_norm.length; ++i)
 				answer += prod.bracket_two_norm[i].output();
-			answer += ')';														//Ende String korrekte Ableitung
+			//solution string ends here
+			answer += ')';
 		}
 		else if(rand_rule == 3) {
+			//defining the number of objects of the inside term
 			let chn = new chain(Math.round(Math.random()*(max_inner-min_inner))+min_inner);
-			if(j != 0) {														//s. o., zweite flag
-				question += ' + '+chn.outer_norm;								//alternativ Vorzeichen, falls nicht mehr erste Position
+			//same as above: loop variable defining the sign of the very first term, first variable defining the signs of first objects within brackets
+			if(j != 0) {
+				question += ' + '+chn.outer_norm;
 				if(chn.outer_diff == '-sin')
 					answer += ' - sin';
 				else
 					answer += ' + '+chn.outer_diff;
 			}
 			else {
-				question += chn.outer_norm;										//Festlegung äußere Funktionen bei Frage und korrekter Antwort
+				question += chn.outer_norm;
 				answer += chn.outer_diff;
 			}
-			if(chn.outer_norm == 'e')											//Start Fragestring
+			//special treatment for transmitting e function content string to html
+			if(chn.outer_norm == 'e')	
 				question += '<sup>';
 			else
 				question += '(';
@@ -120,22 +132,24 @@ function task_differentiate() {
 			if(chn.outer_norm == 'e')
 				question += '</sup>';
 			else
-				question += ')';												//Ende Fragestring
-			if(chn.outer_diff == 'e')											//Start String korrekte Antwort
+				question += ')';
+			//above line ends task string
+			if(chn.outer_diff == 'e')
 				answer += '<sup>';
 			else
 				answer += '(';
 			first = true;
 			for(let i = 0; i < chn.inner_norm.length; ++i)
 				answer += chn.inner_norm[i].output();
-			if(chn.outer_diff == 'e')											//Mittelteil String korrekte Antwort
+			if(chn.outer_diff == 'e')
 				answer += '</sup> *(';
 			else
 				answer += ')*(';
 			first = true;
 			for(let i = 0; i < chn.inner_diff.length; ++i)
 				answer += chn.inner_diff[i].output();
-			answer += ')';														//Ende String korrekte Antwort
+			answer += ')';	
+			//above line ends solution string
 		}
 	}
 	first = true;
@@ -143,31 +157,25 @@ function task_differentiate() {
 	document.getElementById('solution').innerHTML = answer;
 }
 
-//Ausgabe der Lösung, hier wird einzig die Lösung angezeigt, berechnet und ins entsprechende html-Element geschrieben wird sie bereits in der task-Funktion
+//function for showing the solution, all it does is making the according html element visible
 function solution_visual() {
 	document.getElementById('solution').style.visibility = 'visible';
 }
 
-//diverse Domänengrenzen, Zugehörigkeit der Werte ist (hoffentlich) aus der Variablen-Bezeichnung ablesbar
-var min_coeff = -20;				//durch Math.ceil() bei Parameter-Übergabe sind die Mindestwerte um 1 erhöht
-var max_coeff = 19;					//schreibe ggf. auf -1 um
-var min_expo = -10;					//durch Math.ceil() bei Parameter-Übergabe sind die Mindestwerte um 1 erhöht
-var max_expo = 9;					//schreibe ggf. auf -1 um
-var max_inner = 3;					//Höchstzahl Terme innerhalb eines Produkt- oder Kettenterms
-var min_inner = 2;					//Mindeszahl Terme innerhalb eines Produkt- oder Kettenterms
-var max_total = 5;					//Höchstzahl der gesamten Terme (additiv, multiplikativ, Ketten)
-var min_total = 1;					//Mindestzahl der gesamten Terme (additiv, multiplikativ, Ketten)
+//various domain limits
+var min_coeff = -20;				//minimum value for coefficients (caution because Math.ceil() is applied the actual minimum is -1 compared to the absolute value)
+var max_coeff = 19;				//maximum value for coefficients (overwrite with -1 and use Math.abs() to avoid the 0 value problem
+var min_expo = -10;				//minimum value for exponents, see above
+var max_expo = 9;				//maximum value for exponents, see above
+var max_inner = 3;				//maxmimum number of objects for a inner term of a two element chain of functions
+var min_inner = 2;					//minimum number for the above
+var max_total = 5;					//maximum number for total different terms (or rule applications) for a single task
+var min_total = 1;					//minimum number for the above
 
-//globale flag zur Unterscheidung ob ein Term der erste in einer additiven Reihe ist, initialisiert mit true
-var first = true;
-
-/***Anmerkung zu den Domänengrenzen:
-Koeffizienten und auch Exponenten können nach derzeitigem Vorliegen 0 werden, wobei viele Fälle ausgefangen werden.
-Ein unwahrscheinlicher, aber möglicher Problemfall ist, wenn in einem inneren Term (Produkt oder Kettenfunktion) vor oder nach
-Ableitung alle Koeffizienten den Wert 0 zufällig zugewiesen bekommen. Dann ist der ganze Term obsolet, wird aber noch als ()
-dargestellt und die Ableitung des zweiten Terms angezeigt, obwohl das mathematisch keinen Sinn macht (Multiplikation mit 0
-eliminiert alle multiplikativ mit 0 verknüpfte Terme).
-Will man dieses Problem umgehen, entkommentiere man die Zufalls-Operationen nach den jeweiligen Zuweisungen des normalen
-Koeffizienten bzw. Exponenten im basic_object-Konstruktor. Dieses Vorgehen legt fest, dass ein negativer Term mit einer definierten
-Wahrscheinlichkeit positiv wird. Zusätzlich lege man den maximalen Wert der Domänengrenzen für Koeffizienten und Exponenten
-mit -1 fest.***/
+/***
+Remarks about the domain limits:
+With the current version coefficients as well as exponents can be 0. Several cases are caught, but there still remains the rather unlikely but possible case that before or after differentiation
+the coefficient becomes 0 and renders the term irrelevant. That term is still represented as () and the differentiation of the term is displayed although that makes of course no sense. To avoid
+this problem only a negative range of values excluding 0 can be used and another operation can randomly define whether Math.abs() is applied to the coefficient (preferentially with a skew towards
+obtaining the absolute value).
+***/
